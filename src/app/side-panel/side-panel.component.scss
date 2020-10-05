@@ -1,0 +1,19 @@
+.side-panel {
+  background: #FFF;
+  position: absolute;
+  top: 0;
+  left: calc(100% - 25rem);
+  right: 0;
+  bottom: 0;
+  padding: 1rem;
+
+  .title {
+    text-align: center;
+    font-size: 1.35rem;
+  }
+
+  .about {
+    padding: 0.5rem;
+  }
+}
+
