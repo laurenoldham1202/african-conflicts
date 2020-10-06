@@ -34,6 +34,7 @@ export class FiltersComponent implements OnInit {
     this.form = this.fb.group({
       countries: [[], Validators.required],
       actors: [[], Validators.required],
+      fatalities: [[50, 70], Validators.required],
     });
 
     this.dataService.conflictData$.subscribe((data: FeatureCollection) => {
@@ -41,12 +42,18 @@ export class FiltersComponent implements OnInit {
         this.conflicts = data;
 
         console.log(this.conflicts);
+
+        const min = Math.min(...this.conflicts.features.map(x => +x.properties.incident_fatalities));
+        const max = Math.max(...this.conflicts.features.map(x => +x.properties.incident_fatalities));
+        console.log(max);
+
         this.conflicts.features.forEach(feature => {
           this.countries.push(feature.properties.country);
           this.actors.push(feature.properties.actor1, feature.properties.actor2);
         });
 
         // TODO create master toggle, remove '' option from actors
+        // TODO use filter on this.conflicts.features instead of looping?
         this.countries = [...new Set(this.countries.sort())];
         this.actors = [...new Set(this.actors.sort())];
         // console.log(this.actors);
@@ -54,6 +61,12 @@ export class FiltersComponent implements OnInit {
 
     });
 
+
+
+  }
+
+  onchange(e) {
+    console.log(e);
   }
 
   change(): void {
