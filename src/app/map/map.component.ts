@@ -36,6 +36,19 @@ export class MapComponent implements OnInit {
 
     this.dataService.setConflictData(this.conflicts);
 
+    this.map.on('load', () => {
+      this.map.addSource('conflicts', {
+        type: 'geojson',
+        data: this.conflicts,
+      });
+
+      this.map.addLayer({
+        id: 'conflicts',
+        type: 'circle',
+        source: 'conflicts',
+      });
+    });
+
   }
 
 }

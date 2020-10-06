@@ -26,15 +26,15 @@ export class FiltersComponent implements OnInit {
   });
   options = {
     floor: 0,
-    ceil: 100,
-    step: 5
+    ceil: 0,
+    step: 1,
   };
 
   ngOnInit(): void {
     this.form = this.fb.group({
       countries: [[], Validators.required],
       actors: [[], Validators.required],
-      fatalities: [[50, 70], Validators.required],
+      fatalities: [[], Validators.required],
     });
 
     this.dataService.conflictData$.subscribe((data: FeatureCollection) => {
@@ -43,9 +43,13 @@ export class FiltersComponent implements OnInit {
 
         console.log(this.conflicts);
 
-        const min = Math.min(...this.conflicts.features.map(x => +x.properties.incident_fatalities));
-        const max = Math.max(...this.conflicts.features.map(x => +x.properties.incident_fatalities));
+        const fatalities = this.conflicts.features.map(x => +x.properties.incident_fatalities);
+        const min = Math.min(...fatalities);
+        const max = Math.max(...fatalities);
         console.log(max);
+        this.options.floor = min;
+        this.options.ceil = max;
+        this.form.controls.fatalities.patchValue([min, max]);
 
         this.conflicts.features.forEach(feature => {
           this.countries.push(feature.properties.country);
