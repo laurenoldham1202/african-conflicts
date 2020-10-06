@@ -1,9 +1,24 @@
-.map-container {
+.map-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 25rem;
+  left: 0;
+
   #map {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 25rem;
+    right: 0;
     left: 0;
+  }
+
+  .legend {
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 3rem;
+    background: #000;
   }
 }
