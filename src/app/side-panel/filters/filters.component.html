@@ -1,1 +1,15 @@
-<p>filters works!</p>
+<form [formGroup]="form" class="filter-form">
+  <mat-form-field>
+    <mat-label>Filter by country</mat-label>
+    <mat-select formControlName="countries" multiple>
+      <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Filter by actors</mat-label>
+    <mat-select formControlName="actors" multiple>
+      <mat-option *ngFor="let actor of actors" [value]="actor">{{ actor }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>

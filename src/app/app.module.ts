@@ -8,6 +8,7 @@ import {MaterialModule} from './material.module';
 import {MapComponent} from './map/map.component';
 import { SidePanelComponent } from './side-panel/side-panel.component';
 import { FiltersComponent } from './side-panel/filters/filters.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { FiltersComponent } from './side-panel/filters/filters.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

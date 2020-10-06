@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 import * as M from 'mapbox-gl';
 
+import { DataService } from '../data.service';
+import { FeatureCollection } from '../../constants/classes';
+
 // @ts-ignore
 import * as conflicts from 'src/assets/data/africa-conflict-2018.json';
-import {FeatureCollection} from '../../constants/classes';
-import {DataService} from '../data.service';
 
 @Component({
   selector: 'app-map',
@@ -23,7 +24,7 @@ export class MapComponent implements OnInit {
     private dataService: DataService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     (M as any).accessToken = this.accessToken;
 
     this.map = new M.Map({
