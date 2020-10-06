@@ -9,6 +9,7 @@ import {MapComponent} from './map/map.component';
 import { SidePanelComponent } from './side-panel/side-panel.component';
 import { FiltersComponent } from './side-panel/filters/filters.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {Ng5SliderModule} from 'ng5-slider';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
+    Ng5SliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
