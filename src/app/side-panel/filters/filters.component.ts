@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from '../../data.service';
-import {FeatureCollection} from '../../../constants/classes';
+import {FeatureCollection, Filters} from '../../../constants/classes';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 // @ts-ignore
 import * as conflicts from 'src/assets/data/africa-conflict-2018.json';
+import {DEFAULT_FILTERS} from '../../../constants/constants';
 
 @Component({
   selector: 'app-filters',
@@ -31,16 +32,7 @@ export class FiltersComponent implements OnInit {
     step: 1,
   };
 
-  // TODO type
-  filters = {
-    countries: [],
-    startDate: '',
-    endDate: '',
-    fatalities: {
-      min: 0,
-      max: 0,
-    }
-  };
+  filters: Filters = DEFAULT_FILTERS;
 
   ngOnInit(): void {
     this.dataService.setConflictData(this.conflicts.features);

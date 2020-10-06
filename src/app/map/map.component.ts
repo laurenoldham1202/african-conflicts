@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import * as M from 'mapbox-gl';
 
 import { DataService } from '../data.service';
-import {Feature, FeatureCollection} from '../../constants/classes';
+import {Feature, FeatureCollection, Filters} from '../../constants/classes';
+import {DEFAULT_FILTERS} from '../../constants/constants';
 
 @Component({
   selector: 'app-map',
@@ -17,16 +18,7 @@ export class MapComponent implements OnInit {
 
   conflicts: Feature[];
 
-  // TODO type
-  filters = {
-    countries: [],
-    startDate: '',
-    endDate: '',
-    fatalities: {
-      min: 0,
-      max: 0,
-    }
-  };
+  filters: Filters;
 
   constructor(
     private dataService: DataService,
@@ -42,6 +34,8 @@ export class MapComponent implements OnInit {
       zoom: 2.9,
     });
 
+    console.log(new Date('08-04-2018'));
+
     // convert to different input sharing
     this.dataService.conflictData$.subscribe((data: Feature[]) => {
       if (data) {
@@ -51,7 +45,7 @@ export class MapComponent implements OnInit {
     });
 
     // TODO type
-    this.dataService.filters$.subscribe((filters: any) => {
+    this.dataService.filters$.subscribe((filters: Filters) => {
       if (filters) {
         this.filters = filters;
         console.log(this.filters);
@@ -59,7 +53,7 @@ export class MapComponent implements OnInit {
 
           this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
         } else {
-          console.log('all');
+          // console.log('all');
           this.map.setFilter('conflicts', ['has', 'country']);
 
         }

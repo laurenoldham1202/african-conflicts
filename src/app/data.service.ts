@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import {BehaviorSubject, Observable} from 'rxjs';
-import {Feature, FeatureCollection} from '../constants/classes';
+import {Feature, FeatureCollection, Filters} from '../constants/classes';
+import {DEFAULT_FILTERS} from '../constants/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,8 @@ export class DataService {
   conflictData$: Observable<Feature[]> = this.conflictData.asObservable();
 
   // TODO type
-  private filters: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
-  filters$: Observable<any> = this.filters.asObservable();
+  private filters: BehaviorSubject<Filters> = new BehaviorSubject<Filters>(undefined);
+  filters$: Observable<Filters> = this.filters.asObservable();
 
   constructor() { }
 
@@ -21,7 +22,7 @@ export class DataService {
     this.conflictData.next(data);
   }
 
-  applyFilters(filters: any) {
+  applyFilters(filters: Filters) {
     this.filters.next(filters);
   }
 }
