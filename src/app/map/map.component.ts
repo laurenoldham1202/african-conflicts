@@ -4,7 +4,7 @@ import * as M from 'mapbox-gl';
 
 import { DataService } from '../data.service';
 import {Feature, FeatureCollection, Filters} from '../../constants/classes';
-import {DEFAULT_FILTERS} from '../../constants/constants';
+import {COUNTRIES, DEFAULT_FILTERS} from '../../constants/constants';
 
 @Component({
   selector: 'app-map',
@@ -66,6 +66,39 @@ export class MapComponent implements OnInit {
     // this.dataService.setConflictData(this.conflicts);
 
     this.map.on('load', () => {
+
+      this.map.addLayer({
+        id: 'countries',
+        type: 'fill',
+        source: {
+          type: 'geojson',
+          data: COUNTRIES,
+        },
+        paint: {
+          'fill-opacity': 1,
+          'fill-color': ['step', ['get', 'deaths_per_million'], '#fcde9c', 4, '#f89872', 10, '#ec666d', 20, '#df4273', 60, '#c5287b', 120, '#7c1d6f', 410, '#FFF'],
+          // 'fill-color': [
+          //   'interpolate',
+          //   ['linear'],
+          //   ['get', 'deaths_per_million'],
+          //   0,
+          //   '#fcde9c',
+          //   3,
+          //   '#f89872',
+          //   9,
+          //   '#ec666d',
+          //   20,
+          //   '#df4273',
+          //   60,
+          //   '#c5287b',
+          //   120,
+          //   '#7c1d6f',
+          //   410,
+          //   '#AAA'
+          // ],
+        }
+      });
+
       this.map.addSource('conflicts', {
         type: 'geojson',
         data: {type: 'FeatureCollection', features: this.conflicts},

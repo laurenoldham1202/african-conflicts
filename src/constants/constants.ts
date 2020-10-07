@@ -1,4 +1,5 @@
 import {Filters} from './classes';
+import * as countries from 'src/assets/data/africa-countries-counts.json';
 
 export const DEFAULT_FILTERS: Filters = {
   countries: [],
@@ -12,3 +13,5 @@ export const DEFAULT_FILTERS: Filters = {
     max: 100,
   }
 };
+
+export const COUNTRIES = (countries as any).default;
