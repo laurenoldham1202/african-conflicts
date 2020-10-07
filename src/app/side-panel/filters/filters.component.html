@@ -18,3 +18,8 @@
 <!--<form [formGroup]="sliderForm">-->
 <!--  <ng5-slider [options]="options" formControlName="sliderControl"></ng5-slider>-->
 <!--</form>-->
+
+<div class="tmp" *ngFor="let country of filters.countries" style="border: 1px solid orangered;">
+  <h2>{{country}}</h2>
+  <p>here's some info about {{country}}</p>
+</div>

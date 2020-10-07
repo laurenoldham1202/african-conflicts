@@ -19,7 +19,8 @@ export class MapComponent implements OnInit {
   conflicts: Feature[];
   filters: Filters;
 
-  legendBreaks = [[0, 3], [4, 9], [10, 20], [21, 60], [61, 120], [212, 410]];
+  orangeColors = ['#fde0c5', '#facba6', '#f8b58b', '#f2855d', '#ef6a4c', '#eb4a40'];
+  legendBreaks = [[0, 3], [4, 9], [10, 20], [21, 60], [61, 120], [121, 410]];
 
   constructor(
     private dataService: DataService,
@@ -56,14 +57,26 @@ export class MapComponent implements OnInit {
         } else {
           // console.log('all');
           this.map.setFilter('conflicts', ['has', 'country']);
-
         }
-
       }
-
-
     });
     // this.dataService.setConflictData(this.conflicts);
+    //
+    // const style = [];
+    // const breaks = [4, 10, 20, 60, 120, 410];
+    // breaks.forEach(br => {
+    //
+    // });
+    //
+    // this.orangeColors.forEach((color, i) => {
+    //   if (i + 1 < this.legendBreaks.length) {
+    //     style.push(color, this.legendBreaks[i + 1][0]);
+    //   } else {
+    //     style.push('')
+    //   }
+    // });
+
+    // console.log(style);
 
     this.map.on('load', () => {
 
@@ -76,40 +89,30 @@ export class MapComponent implements OnInit {
         },
         paint: {
           'fill-opacity': 1,
-          'fill-color': ['step', ['get', 'deaths_per_million'], '#fcde9c', 4, '#f89872', 10, '#ec666d', 20, '#df4273', 60, '#c5287b', 120, '#7c1d6f', 410, '#FFF'],
-          // 'fill-color': [
-          //   'interpolate',
-          //   ['linear'],
-          //   ['get', 'deaths_per_million'],
-          //   0,
-          //   '#fcde9c',
-          //   3,
-          //   '#f89872',
-          //   9,
-          //   '#ec666d',
-          //   20,
-          //   '#df4273',
-          //   60,
-          //   '#c5287b',
-          //   120,
-          //   '#7c1d6f',
-          //   410,
-          //   '#AAA'
-          // ],
+          'fill-outline-color': '#555',
+          // TODO change black on undefined
+          'fill-color': ['step', ['get', 'deaths_per_million'],
+            '#fde0c5', 4, '#facba6', 10, '#f8b58b', 20, '#f2855d', 60, '#ef6a4c', 120, '#eb4a40', 410, '#FFF'],
         }
       });
 
       this.map.addSource('conflicts', {
         type: 'geojson',
-        data: {type: 'FeatureCollection', features: this.conflicts}, cluster: true,
+        data: {type: 'FeatureCollection', features: this.conflicts},
+        // cluster: true,
       });
 
       this.map.addLayer({
         id: 'conflicts',
         type: 'circle',
         source: 'conflicts',
+        paint: {
+          'circle-color': 'teal',
+          'circle-radius': 3,
+        }
       });
 
+    // #fde0c5,#facba6,#f8b58b,#f59e72,#f2855d,#ef6a4c,#eb4a40
       // map.setFilter(layer, ['match', ['get', matchField], matchArray, true, false]);
       // const countries = ['Angola', 'Benin'];
       // this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
