@@ -101,7 +101,7 @@ export class MapComponent implements OnInit {
 
       this.map.addSource('conflicts', {
         type: 'geojson',
-        data: {type: 'FeatureCollection', features: this.conflicts},
+        data: {type: 'FeatureCollection', features: this.conflicts}, cluster: true,
       });
 
       this.map.addLayer({
