@@ -17,8 +17,9 @@ export class MapComponent implements OnInit {
   accessToken = 'pk.eyJ1IjoibGF1cmVub2xkaGFtMTIwMiIsImEiOiJjaW55dm52N2gxODJrdWtseWZ5czAyZmp5In0.YkEUt6GvIDujjudu187eyA';
 
   conflicts: Feature[];
-
   filters: Filters;
+
+  legendBreaks = [[0, 3], [4, 9], [10, 20], [21, 60], [61, 120], [212, 410]];
 
   constructor(
     private dataService: DataService,

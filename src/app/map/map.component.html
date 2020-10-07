@@ -1,5 +1,11 @@
 <div class="map-box">
   <div id="map"></div>
 
-  <div class="legend"></div>
+  <div class="legend">
+    <div class="legend-item"
+         *ngFor="let legend of legendBreaks; let i = index"
+         [ngClass]="'legend-' + (i+1)">
+      {{legend[0]}} - {{legend[1]}}
+    </div>
+  </div>
 </div>
