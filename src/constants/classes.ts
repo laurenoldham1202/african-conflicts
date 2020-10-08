@@ -10,7 +10,8 @@ export interface FeatureCollection {
 }
 
 export interface Filters {
-  countries: string[];
+  // countries: string[];
+  countries: any;
   actors: string[];
   dates: {
     start: Date;

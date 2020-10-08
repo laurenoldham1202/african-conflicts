@@ -1,8 +1,11 @@
 import {Filters} from './classes';
+
 import * as countries from 'src/assets/data/africa-countries-counts.json';
+import * as conflicts from 'src/assets/data/africa-conflict-2018.json';
 
 export const DEFAULT_FILTERS: Filters = {
-  countries: [],
+  // countries: [],
+  countries: {},
   actors: [],
   dates: {
     start: new Date('01-01-2018'),
@@ -15,3 +18,4 @@ export const DEFAULT_FILTERS: Filters = {
 };
 
 export const COUNTRIES = (countries as any).default;
+export const CONFLICTS = (conflicts as any).default;

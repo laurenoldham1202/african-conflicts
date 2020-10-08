@@ -16,8 +16,11 @@ export class MapComponent implements OnInit {
   map: M.Map;
   accessToken = 'pk.eyJ1IjoibGF1cmVub2xkaGFtMTIwMiIsImEiOiJjaW55dm52N2gxODJrdWtseWZ5czAyZmp5In0.YkEUt6GvIDujjudu187eyA';
 
-  conflicts: Feature[];
-  filters: Filters;
+  // conflicts: Feature[];
+  // filters: Filters;
+
+  countries;
+  conflicts; // TODO type
 
   orangeColors = ['#fde0c5', '#facba6', '#f8b58b', '#f2855d', '#ef6a4c', '#eb4a40'];
   legendBreaks = [[0, 3], [4, 9], [10, 20], [21, 60], [61, 120], [121, 410]];
@@ -37,55 +40,21 @@ export class MapComponent implements OnInit {
       doubleClickZoom: false,
     });
 
-    // convert to different input sharing
-    this.dataService.conflictData$.subscribe((data: Feature[]) => {
-      if (data) {
-        this.conflicts = data;
-        // console.log(this.conflicts);
-      }
+    this.dataService.conflicts$.subscribe(conflicts => {
+      this.conflicts = conflicts;
     });
 
-    // // TODO type
-    // this.dataService.filters$.subscribe((filters: Filters) => {
-    //   if (filters) {
-    //     this.filters = filters;
-    //     console.log(this.filters);
-    //     if (this.filters.countries.length) {
-    //
-    //       this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
-    //     } else {
-    //       // console.log('all');
-    //       this.map.setFilter('conflicts', ['has', 'country']);
-    //     }
-    //   }
-    // });
-    // this.dataService.setConflictData(this.conflicts);
-    //
-    // const style = [];
-    // const breaks = [4, 10, 20, 60, 120, 410];
-    // breaks.forEach(br => {
-    //
-    // });
-    //
-    // this.orangeColors.forEach((color, i) => {
-    //   if (i + 1 < this.legendBreaks.length) {
-    //     style.push(color, this.legendBreaks[i + 1][0]);
-    //   } else {
-    //     style.push('')
-    //   }
-    // });
-
-    // console.log(style);
+    this.dataService.countries$.subscribe(countries => {
+      this.countries = countries;
+    });
 
     this.map.on('load', () => {
-
-
       this.map.addLayer({
         id: 'countries',
         type: 'fill',
         source: {
           type: 'geojson',
-          data: COUNTRIES,
+          data: this.countries,
         },
         paint: {
           'fill-opacity': 1,
@@ -98,7 +67,7 @@ export class MapComponent implements OnInit {
 
       this.map.addSource('conflicts', {
         type: 'geojson',
-        data: {type: 'FeatureCollection', features: this.conflicts},
+        data: this.conflicts,
         // cluster: true,
       });
 
@@ -111,44 +80,141 @@ export class MapComponent implements OnInit {
           'circle-radius': 3,
         }
       });
-
-
-      // TODO type
-      this.dataService.filters$.subscribe((filters: Filters) => {
-        if (filters) {
-          this.filters = filters;
-          if (this.filters.countries.length) {
-            console.log(this.filters.countries);
-            this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
-          } else {
-            // console.log('all');
-            this.map.setFilter('conflicts', ['has', 'country']);
-          }
-        }
-      });
-
-    // #fde0c5,#facba6,#f8b58b,#f59e72,#f2855d,#ef6a4c,#eb4a40
-      // map.setFilter(layer, ['match', ['get', matchField], matchArray, true, false]);
-      // const countries = ['Angola', 'Benin'];
-      // this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
-
-      const countries = [];
-      this.map.on('click', 'countries', (e) => {
-        // TODO prevent duplicates
-        // console.log(this.filters.countries);
-        const country = e.features[0].properties.NAME;
-        if (!this.filters.countries.includes(country)) {
-          this.filters.countries.push(country);
-        } else {
-          this.filters.countries.splice(this.filters.countries.indexOf(country), 1);
-
-        }
-        // countries.push(e.features[0].properties.NAME);
-        // this.filters.countries = countries;
-        this.dataService.applyFilters(this.filters);
-
-      });
     });
+
+    // // convert to different input sharing
+    // this.dataService.conflictData$.subscribe((data: Feature[]) => {
+    //   if (data) {
+    //     this.conflicts = data;
+    //     // console.log(this.conflicts);
+    //   }
+    // });
+    //
+    // // // TODO type
+    // // this.dataService.filters$.subscribe((filters: Filters) => {
+    // //   if (filters) {
+    // //     this.filters = filters;
+    // //     console.log(this.filters);
+    // //     if (this.filters.countries.length) {
+    // //
+    // //       this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
+    // //     } else {
+    // //       // console.log('all');
+    // //       this.map.setFilter('conflicts', ['has', 'country']);
+    // //     }
+    // //   }
+    // // });
+    // // this.dataService.setConflictData(this.conflicts);
+    // //
+    // // const style = [];
+    // // const breaks = [4, 10, 20, 60, 120, 410];
+    // // breaks.forEach(br => {
+    // //
+    // // });
+    // //
+    // // this.orangeColors.forEach((color, i) => {
+    // //   if (i + 1 < this.legendBreaks.length) {
+    // //     style.push(color, this.legendBreaks[i + 1][0]);
+    // //   } else {
+    // //     style.push('')
+    // //   }
+    // // });
+    //
+    // // console.log(style);
+    //
+    // this.map.on('load', () => {
+    //
+    //
+    //   this.map.addLayer({
+    //     id: 'countries',
+    //     type: 'fill',
+    //     source: {
+    //       type: 'geojson',
+    //       data: COUNTRIES,
+    //     },
+    //     paint: {
+    //       'fill-opacity': 1,
+    //       'fill-outline-color': '#555',
+    //       // TODO change black on undefined
+    //       'fill-color': ['step', ['get', 'deaths_per_million'],
+    //         '#fde0c5', 4, '#facba6', 10, '#f8b58b', 20, '#f2855d', 60, '#ef6a4c', 120, '#eb4a40', 410, '#FFF'],
+    //     }
+    //   });
+    //
+    //
+    //   this.map.addSource('conflicts', {
+    //     type: 'geojson',
+    //     data: {type: 'FeatureCollection', features: this.conflicts},
+    //     // cluster: true,
+    //   });
+    //
+    //   this.map.addLayer({
+    //     id: 'conflicts',
+    //     type: 'circle',
+    //     source: 'conflicts',
+    //     paint: {
+    //       'circle-color': 'teal',
+    //       'circle-radius': 3,
+    //     }
+    //   });
+    //
+    //
+    //   // TODO type
+    //   this.dataService.filters$.subscribe((filters: Filters) => {
+    //     if (filters) {
+    //       this.filters = filters;
+    //       if (this.filters.countries.length) {
+    //         this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
+    //       } else {
+    //         // console.log('all');
+    //         this.map.setFilter('conflicts', ['has', 'country']);
+    //       }
+    //     }
+    //   });
+    //
+    // // #fde0c5,#facba6,#f8b58b,#f59e72,#f2855d,#ef6a4c,#eb4a40
+    //   // map.setFilter(layer, ['match', ['get', matchField], matchArray, true, false]);
+    //   // const countries = ['Angola', 'Benin'];
+    //   // this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
+    //
+    //   console.log(COUNTRIES);
+    //
+    //
+    //   const countries = [];
+    //   const obj = {};
+    //   this.map.on('click', 'countries', (e) => {
+    //     // TODO prevent duplicates
+    //     // console.log(this.filters.countries);
+    //     const country = e.features[0].properties.NAME;
+    //
+    //
+    //     // console.log(...COUNTRIES.features.filter(x => x.properties.NAME === country).map(y => y.properties));
+    //
+    //     console.log(this.filters.countries);
+    //     // if (!this.filters.countries.includes(country)) {
+    //     //   // this.filters.countries.push(country);
+    //     //   obj[country] = COUNTRIES.features.filter(x => x.properties.NAME === country).map(y => y.properties)[0];
+    //     // } else {
+    //     //   // this.filters.countries.splice(this.filters.countries.indexOf(country), 1);
+    //     //   delete obj[country];
+    //     // }
+    //
+    //     console.log(obj);
+    //
+    //     this.filters.countries = obj;
+    //     // countries.push(e.features[0].properties.NAME);
+    //     // this.filters.countries = countries;
+    //     this.dataService.applyFilters(this.filters);
+    //
+    //   });
+    //
+    //   // console.log(this.map.getLayer('countries').paint['_values']);
+    //   // console.log(this.map.style.stylesheet.layers);
+    //
+    //
+    // });
+    //
+
 
   }
 
