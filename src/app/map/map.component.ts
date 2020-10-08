@@ -34,6 +34,7 @@ export class MapComponent implements OnInit {
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
       center: { lon: 18.08970, lat: 1.89502 },
       zoom: 2.9,
+      doubleClickZoom: false,
     });
 
     // convert to different input sharing
@@ -117,7 +118,7 @@ export class MapComponent implements OnInit {
         if (filters) {
           this.filters = filters;
           if (this.filters.countries.length) {
-
+            console.log(this.filters.countries);
             this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
           } else {
             // console.log('all');
@@ -135,7 +136,13 @@ export class MapComponent implements OnInit {
       this.map.on('click', 'countries', (e) => {
         // TODO prevent duplicates
         // console.log(this.filters.countries);
-        this.filters.countries.push(e.features[0].properties.NAME);
+        const country = e.features[0].properties.NAME;
+        if (!this.filters.countries.includes(country)) {
+          this.filters.countries.push(country);
+        } else {
+          this.filters.countries.splice(this.filters.countries.indexOf(country), 1);
+
+        }
         // countries.push(e.features[0].properties.NAME);
         // this.filters.countries = countries;
         this.dataService.applyFilters(this.filters);

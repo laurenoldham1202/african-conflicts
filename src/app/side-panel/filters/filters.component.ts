@@ -83,9 +83,14 @@ export class FiltersComponent implements OnInit {
   }
 
   selectCountry(e) {
-    console.log(e);
-    this.filters.countries.push(e);
-    this.dataService.applyFilters(this.filters);
+    if (this.filters.countries.includes(e)) {
+      this.filters.countries.splice(this.filters.countries.indexOf(e), 1);
+      this.dataService.applyFilters(this.filters);
+
+    } else {
+      this.filters.countries.push(e);
+      this.dataService.applyFilters(this.filters);
+    }
   }
   //
   // onchange(e) {
