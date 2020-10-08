@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from '../../data.service';
 import {FeatureCollection, Filters} from '../../../constants/classes';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 // @ts-ignore
 import * as conflicts from 'src/assets/data/africa-conflict-2018.json';
+import cloneDeep from 'lodash/cloneDeep';
 import {DEFAULT_FILTERS} from '../../../constants/constants';
 
 @Component({
@@ -32,7 +33,7 @@ export class FiltersComponent implements OnInit {
     step: 1,
   };
 
-  filters: Filters = DEFAULT_FILTERS;
+  filters: Filters = cloneDeep(DEFAULT_FILTERS);
 
   ngOnInit(): void {
     this.dataService.setConflictData(this.conflicts.features);
@@ -70,12 +71,14 @@ export class FiltersComponent implements OnInit {
     this.actors = [...new Set(this.actors.sort())];
     // console.log(this.actors);
 
+    this.dataService.applyFilters(this.filters);
 
-    //   }
-    //
-    // });
-
-
+    this.dataService.filters$.subscribe(f => {
+      // console.log(f);
+      this.filters.countries = f.countries;
+      this.form.controls.countries.setValue(this.filters.countries);
+      console.log(this.form.controls.countries.value);
+    });
 
   }
 
@@ -84,6 +87,7 @@ export class FiltersComponent implements OnInit {
   }
 
   change(): void {
+    // console.log(this.form.controls.countries.value);
     // console.log('change');
 
     // console.log(countries);

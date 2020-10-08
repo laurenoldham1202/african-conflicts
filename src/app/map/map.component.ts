@@ -36,8 +36,6 @@ export class MapComponent implements OnInit {
       zoom: 2.9,
     });
 
-    console.log(new Date('08-04-2018'));
-
     // convert to different input sharing
     this.dataService.conflictData$.subscribe((data: Feature[]) => {
       if (data) {
@@ -46,20 +44,20 @@ export class MapComponent implements OnInit {
       }
     });
 
-    // TODO type
-    this.dataService.filters$.subscribe((filters: Filters) => {
-      if (filters) {
-        this.filters = filters;
-        console.log(this.filters);
-        if (this.filters.countries.length) {
-
-          this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
-        } else {
-          // console.log('all');
-          this.map.setFilter('conflicts', ['has', 'country']);
-        }
-      }
-    });
+    // // TODO type
+    // this.dataService.filters$.subscribe((filters: Filters) => {
+    //   if (filters) {
+    //     this.filters = filters;
+    //     console.log(this.filters);
+    //     if (this.filters.countries.length) {
+    //
+    //       this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
+    //     } else {
+    //       // console.log('all');
+    //       this.map.setFilter('conflicts', ['has', 'country']);
+    //     }
+    //   }
+    // });
     // this.dataService.setConflictData(this.conflicts);
     //
     // const style = [];
@@ -79,6 +77,7 @@ export class MapComponent implements OnInit {
     // console.log(style);
 
     this.map.on('load', () => {
+
 
       this.map.addLayer({
         id: 'countries',
@@ -112,11 +111,36 @@ export class MapComponent implements OnInit {
         }
       });
 
+
+      // TODO type
+      this.dataService.filters$.subscribe((filters: Filters) => {
+        if (filters) {
+          this.filters = filters;
+          if (this.filters.countries.length) {
+
+            this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
+          } else {
+            // console.log('all');
+            this.map.setFilter('conflicts', ['has', 'country']);
+          }
+        }
+      });
+
     // #fde0c5,#facba6,#f8b58b,#f59e72,#f2855d,#ef6a4c,#eb4a40
       // map.setFilter(layer, ['match', ['get', matchField], matchArray, true, false]);
       // const countries = ['Angola', 'Benin'];
       // this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
 
+      const countries = [];
+      this.map.on('click', 'countries', (e) => {
+        // TODO prevent duplicates
+        // console.log(this.filters.countries);
+        this.filters.countries.push(e.features[0].properties.NAME);
+        // countries.push(e.features[0].properties.NAME);
+        // this.filters.countries = countries;
+        this.dataService.applyFilters(this.filters);
+
+      });
     });
 
   }

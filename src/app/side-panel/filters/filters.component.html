@@ -15,11 +15,18 @@
 
   <ng5-slider (userChange)="onchange($event)" [options]="options" formControlName="fatalities"></ng5-slider>
 </form>
+
+<mat-selection-list #shoes>
+  <mat-list-option *ngFor="let shoe of countries" [selected]="filters.countries.includes(shoe)">
+    {{shoe}}
+  </mat-list-option>
+</mat-selection-list>
 <!--<form [formGroup]="sliderForm">-->
 <!--  <ng5-slider [options]="options" formControlName="sliderControl"></ng5-slider>-->
 <!--</form>-->
-
 <div class="tmp" *ngFor="let country of filters.countries" style="border: 1px solid orangered;">
+  {{filters.countries}}
+
   <h2>{{country}}</h2>
   <p>here's some info about {{country}}</p>
 </div>
