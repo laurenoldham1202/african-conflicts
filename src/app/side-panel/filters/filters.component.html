@@ -1,23 +1,23 @@
-<form [formGroup]="form" class="filter-form">
-  <mat-form-field>
-    <mat-label>Filter by country</mat-label>
-    <mat-select formControlName="countries" multiple (selectionChange)="change()">
-      <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+<!--<form [formGroup]="form" class="filter-form">-->
+<!--  <mat-form-field>-->
+<!--    <mat-label>Filter by country</mat-label>-->
+<!--    <mat-select formControlName="countries" multiple (selectionChange)="change()">-->
+<!--      <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>-->
+<!--    </mat-select>-->
+<!--  </mat-form-field>-->
 
-  <mat-form-field>
-    <mat-label>Filter by actors</mat-label>
-    <mat-select formControlName="actors" multiple>
-      <mat-option *ngFor="let actor of actors" [value]="actor">{{ actor }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+<!--  <mat-form-field>-->
+<!--    <mat-label>Filter by actors</mat-label>-->
+<!--    <mat-select formControlName="actors" multiple>-->
+<!--      <mat-option *ngFor="let actor of actors" [value]="actor">{{ actor }}</mat-option>-->
+<!--    </mat-select>-->
+<!--  </mat-form-field>-->
 
-  <ng5-slider (userChange)="onchange($event)" [options]="options" formControlName="fatalities"></ng5-slider>
-</form>
+<!--  <ng5-slider (userChange)="onchange($event)" [options]="options" formControlName="fatalities"></ng5-slider>-->
+<!--</form>-->
 
 <mat-selection-list #shoes>
-  <mat-list-option *ngFor="let shoe of countries" [selected]="filters.countries.includes(shoe)">
+  <mat-list-option *ngFor="let shoe of countries" [selected]="filters.countries.includes(shoe)" (click)="selectCountry(shoe)">
     {{shoe}}
   </mat-list-option>
 </mat-selection-list>
