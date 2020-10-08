@@ -22,6 +22,9 @@ export class DataService {
   private countries: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
   countries$: Observable<any> = this.countries.asObservable();
 
+  private selectedCountries: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
+  selectedCountries$: Observable<any> = this.selectedCountries.asObservable();
+
   constructor() { }
 
   setConflicts(data: any) {
@@ -30,6 +33,10 @@ export class DataService {
 
   setCountries(data: any) {
     this.countries.next(data);
+  }
+
+  setSelectedCountries(data: any) {
+    this.selectedCountries.next(data);
   }
 
   setConflictData(data: Feature[]) {

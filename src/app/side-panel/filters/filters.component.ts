@@ -36,6 +36,9 @@ export class FiltersComponent implements OnInit {
 
   countryNames;
 
+  selected = [];
+  tmp = {}
+
   ngOnInit(): void {
 
 
@@ -45,12 +48,33 @@ export class FiltersComponent implements OnInit {
 
     this.dataService.countries$.subscribe(countries => {
       this.countries = countries;
-      // console.log(this.countries);
       this.countryNames = this.countries.features.map(y => y.properties.NAME).sort();
-      console.log(this.countryNames);
     });
 
 
+    this.dataService.selectedCountries$.subscribe(countries => {
+      // console.log(countries);
+      if (countries) {
+        this.selected.push(...countries);
+        console.log(this.selected);
+
+      }
+
+    });
+  }
+
+  selectCountry(country) {
+    this.selected.push(country);
+    console.log(this.selected);
+  }
+
+  click() {
+    this.selected.push('Angola');
+  }
+
+  returnCountryDetails(country) {
+    // console.log(this.countries.features.filter(x => x.properties.NAME === country).map(y => y.properties)[0]);
+    return this.countries.features.filter(x => x.properties.NAME === country).map(y => y.properties)[0];
   }
 
   // ngOnInit(): void {

@@ -80,6 +80,15 @@ export class MapComponent implements OnInit {
           'circle-radius': 3,
         }
       });
+
+      const countries = [];
+      this.map.on('click', 'countries', (e) => {
+        // TODO prevent duplicates
+        // console.log(this.filters.countries);
+        const country = e.features[0].properties.NAME;
+        countries.push(country);
+        this.dataService.setSelectedCountries(countries);
+      });
     });
 
     // // convert to different input sharing
