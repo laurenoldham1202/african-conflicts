@@ -25,7 +25,11 @@ export class DataService {
   private selectedCountries: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
   selectedCountries$: Observable<any> = this.selectedCountries.asObservable();
 
+  private map: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
+  map$: Observable<any> = this.map.asObservable();
+
   constructor() { }
+
 
   setConflicts(data: any) {
     this.conflicts.next(data);
@@ -45,5 +49,14 @@ export class DataService {
 
   applyFilters(filters: Filters) {
     this.filters.next(filters);
+  }
+
+  applyMapFilter(map, selected) {
+    map.setFilter('conflicts', ['match', ['get', 'country'], selected, true, false]);
+  }
+
+
+  setMap(map) {
+    this.map.next(map);
   }
 }

@@ -39,6 +39,8 @@ export class FiltersComponent implements OnInit {
   selected = [];
   tmp = {}
 
+  map;
+
   ngOnInit(): void {
 
 
@@ -51,12 +53,18 @@ export class FiltersComponent implements OnInit {
       this.countryNames = this.countries.features.map(y => y.properties.NAME).sort();
     });
 
+    this.dataService.map$.subscribe(map => {
+      this.map = map;
+    });
 
     this.dataService.selectedCountries$.subscribe(countries => {
       // console.log(countries);
       if (countries) {
         this.selected.push(...countries);
-        console.log(this.selected);
+        this.dataService.applyMapFilter(this.map, this.selected);
+        // console.log(this.selected);
+
+
 
       }
 
@@ -65,7 +73,10 @@ export class FiltersComponent implements OnInit {
 
   selectCountry(country) {
     this.selected.push(country);
-    console.log(this.selected);
+    this.dataService.applyMapFilter(this.map, this.selected);
+
+    // this.dataService.setSelectedCountries(this.selected);
+    // console.log(this.selected);
   }
 
   click() {

@@ -80,6 +80,8 @@ export class MapComponent implements OnInit {
           'circle-radius': 3,
         }
       });
+      this.dataService.setMap(this.map);
+
 
       const countries = [];
       this.map.on('click', 'countries', (e) => {
@@ -89,6 +91,8 @@ export class MapComponent implements OnInit {
         countries.push(country);
         this.dataService.setSelectedCountries(countries);
       });
+
+
     });
 
     // // convert to different input sharing
