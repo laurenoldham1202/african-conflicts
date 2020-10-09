@@ -129,33 +129,22 @@ export class MapComponent implements OnInit {
         }
       });
 
-    // #fde0c5,#facba6,#f8b58b,#f59e72,#f2855d,#ef6a4c,#eb4a40
-      // map.setFilter(layer, ['match', ['get', matchField], matchArray, true, false]);
-      // const countries = ['Angola', 'Benin'];
-      // this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
-
-      const countries = [];
       this.map.on('click', 'countries', (e) => {
-        // TODO prevent duplicates
-        // console.log(this.filters.countries);
-        const country = e.features[0].properties.NAME;
-        if (!this.filters.countries.includes(country)) {
-          this.filters.countries.push(country);
-        } else {
-          this.filters.countries.splice(this.filters.countries.indexOf(country), 1);
+        const props = e.features[0].properties;
+        const country = props.NAME;
 
+        // prevent passing data when data is undefined
+        if (props.count > 0) {
+          if (!this.filters.countries.includes(country)) {
+            this.filters.countries.push(country);
+          } else {
+            this.filters.countries.splice(this.filters.countries.indexOf(country), 1);
+          }
         }
-        // countries.push(e.features[0].properties.NAME);
-        // this.filters.countries = countries;
         this.dataService.applyFilters(this.filters);
 
       });
 
-    //   this.popupGsf = new M.Popup({ className: 'popup-gsf', closeButton: false })
-    //     .setLngLat(e.lngLat)
-    //     .setHTML(content)
-    //     .addTo(map);
-    // });
       this.map.on('mouseover', 'conflicts', (e) => {
         if (this.popup) {
           this.popup.remove();

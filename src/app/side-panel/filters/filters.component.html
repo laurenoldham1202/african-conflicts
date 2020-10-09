@@ -1,12 +1,18 @@
+<mat-label>Select a country from the list or map</mat-label>
 <mat-selection-list style="height: 10rem; overflow: auto;">
-  <mat-list-option color="primary" *ngFor="let country of countries" [selected]="filters.countries.includes(country)" (click)="selectCountry(country)">
+  <mat-list-option
+    color="primary"
+    *ngFor="let country of countries"
+    [selected]="filters.countries.includes(country)"
+    (click)="selectCountry(country)">
     {{country}}
   </mat-list-option>
 </mat-selection-list>
 
-<div class="tmp" *ngFor="let country of filters.countries" style="border: 1px solid #eb4a40; padding: 1rem; margin: 0.5rem; border-radius: 4px;">
+<div class="tmp" *ngFor="let country of filters.countries"
+     style="border: 1px solid #eb4a40; padding: 1rem; margin: 0.5rem; border-radius: 4px; background: rgba(20, 106, 136, 0.1);">
 
   <h2>{{country}}</h2>
-  <h3>{{returnInfo(country, 'deaths_per_million')}} deaths per million residents</h3>
-  <h3>{{returnInfo(country, 'count')}} incidents resulting in fatalities in 2018</h3>
+  <p><strong>{{returnInfo(country, 'deaths_per_million')}}</strong> deaths per million residents</p>
+  <p><strong>{{returnInfo(country, 'count')}}</strong> incidents resulting in fatalities in 2018</p>
 </div>
