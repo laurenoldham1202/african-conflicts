@@ -115,6 +115,8 @@ export class FiltersComponent implements OnInit {
     const data = COUNTRIES.features.filter(c => c.properties.NAME === country).map(c => c.properties[field]);
     // return country + 'blah';
     // console.log(data);
+
+    // TODO fix condition for countries with no deaths per million data
     return field === 'deaths_per_million' ? data[0].toFixed(2) : data;
   }
 
