@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
+// external imports
 import * as M from 'mapbox-gl';
 
+// internal imports
 import { DataService } from '../data.service';
-import {Feature, FeatureCollection, Filters} from '../../constants/classes';
-import {COUNTRIES, DEFAULT_FILTERS} from '../../constants/constants';
+import { Feature, FeatureCollection, Filters } from '../../constants/classes';
+
+// constants
+import { COUNTRIES } from '../../constants/constants';
 
 @Component({
   selector: 'app-map',
@@ -19,6 +23,8 @@ export class MapComponent implements OnInit {
   conflicts: Feature[];
   filters: Filters;
 
+  // because these colors are reused, I would normally iterate through them via this array to maintain DRY principles,
+  // but here I used ngClass in the HTML template to demonstrate dynamic class assignments
   orangeColors = ['#fde0c5', '#facba6', '#f8b58b', '#f2855d', '#ef6a4c', '#eb4a40'];
   legendBreaks = [[0, 3], [3, 9], [9, 20], [20, 60], [60, 120], [120, 410]];
 
@@ -31,6 +37,7 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
     (M as any).accessToken = this.accessToken;
 
+    // instantiate map
     this.map = new M.Map({
       container: 'map', // container id
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
@@ -39,49 +46,16 @@ export class MapComponent implements OnInit {
       doubleClickZoom: false,
     });
 
-    // convert to different input sharing
+    // subscribe to conflict data stream
     this.dataService.conflictData$.subscribe((data: Feature[]) => {
       if (data) {
         this.conflicts = data;
-        // console.log(this.conflicts);
       }
     });
 
-    // // TODO type
-    // this.dataService.filters$.subscribe((filters: Filters) => {
-    //   if (filters) {
-    //     this.filters = filters;
-    //     console.log(this.filters);
-    //     if (this.filters.countries.length) {
-    //
-    //       this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
-    //     } else {
-    //       // console.log('all');
-    //       this.map.setFilter('conflicts', ['has', 'country']);
-    //     }
-    //   }
-    // });
-    // this.dataService.setConflictData(this.conflicts);
-    //
-    // const style = [];
-    // const breaks = [4, 10, 20, 60, 120, 410];
-    // breaks.forEach(br => {
-    //
-    // });
-    //
-    // this.orangeColors.forEach((color, i) => {
-    //   if (i + 1 < this.legendBreaks.length) {
-    //     style.push(color, this.legendBreaks[i + 1][0]);
-    //   } else {
-    //     style.push('')
-    //   }
-    // });
-
-    // console.log(style);
-
     this.map.on('load', () => {
 
-
+      // add colored countries background
       this.map.addLayer({
         id: 'countries',
         type: 'fill',
@@ -98,12 +72,13 @@ export class MapComponent implements OnInit {
         }
       });
 
+      // add conflicts source geojson
       this.map.addSource('conflicts', {
         type: 'geojson',
         data: {type: 'FeatureCollection', features: this.conflicts},
-        // cluster: true,
       });
 
+      // add conflicts layer
       this.map.addLayer({
         id: 'conflicts',
         type: 'circle',
@@ -114,41 +89,48 @@ export class MapComponent implements OnInit {
         }
       });
 
-
-      // TODO type
+      // subscribe to data filters from filter component
       this.dataService.filters$.subscribe((filters: Filters) => {
         if (filters) {
-          this.filters = filters;
+          this.filters = filters;  // set filters in map component
           if (this.filters.countries.length) {
-            // console.log(this.filters.countries);
+            // if countries are selected from filters, filter conflicts for those countries
             this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
           } else {
-            // console.log('all');
+            // if no countries are selected, filter for all conflicts
             this.map.setFilter('conflicts', ['has', 'country']);
           }
         }
       });
 
+      // map click event
       this.map.on('click', 'countries', (e) => {
-        const props = e.features[0].properties;
-        const country = props.NAME;
+        const props = e.features[0].properties;  // target properties
+        const country = props.NAME;  // selected country
 
         // prevent passing data when data is undefined
         if (props.count > 0) {
           if (!this.filters.countries.includes(country)) {
+            // if country does not exist in array, push value on click
             this.filters.countries.push(country);
           } else {
+            // if country DOES exist in array (i.e. it is deselected), remove it from selected countries filter
             this.filters.countries.splice(this.filters.countries.indexOf(country), 1);
           }
         }
-        this.dataService.applyFilters(this.filters);
 
+        // apply newly selected filters app-wide
+        this.dataService.applyFilters(this.filters);
       });
 
       this.map.on('mouseover', 'conflicts', (e) => {
+
+        // remove existing popup on new mouseover event, i.e. only one popup visible at a time
         if (this.popup) {
           this.popup.remove();
         }
+
+        // set popup format with conflict data
         const props = e.features[0].properties;
         const content = `
         <strong>Fatalities: </strong> ${props.incident_fatalities}
@@ -156,16 +138,16 @@ export class MapComponent implements OnInit {
         <br><strong>Location: </strong> ${props.location}, ${props.country}
         <br><strong> Involved Parties: </strong> ${props.actor1} and ${props.actor2}
         `;
+
+        // set popup for each conflict point
         this.popup = new M.Popup({closeButton: false})
           .setLngLat(e.lngLat).setHTML(content).addTo(this.map);
       });
 
+      // remove any popups on mouseout
       this.map.on('mouseout', 'conflicts', (e) => {
         this.popup.remove();
       });
-
     });
-
   }
-
 }
