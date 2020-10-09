@@ -34,8 +34,8 @@ export class MapComponent implements OnInit {
     this.map = new M.Map({
       container: 'map', // container id
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
-      center: { lon: 18.08970, lat: 1.89502 },
-      zoom: 2.9,
+      center: { lon: 18.08970, lat: 6.99502 },
+      zoom: 2.5,
       doubleClickZoom: false,
     });
 
