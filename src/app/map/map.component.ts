@@ -120,7 +120,7 @@ export class MapComponent implements OnInit {
         if (filters) {
           this.filters = filters;
           if (this.filters.countries.length) {
-            console.log(this.filters.countries);
+            // console.log(this.filters.countries);
             this.map.setFilter('conflicts', ['match', ['get', 'country'], this.filters.countries, true, false]);
           } else {
             // console.log('all');

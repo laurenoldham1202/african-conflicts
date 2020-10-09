@@ -11,5 +11,5 @@
   <mat-icon inline="true" (click)="togglePanel()">{{panelVisible ? 'arrow_upward' : 'arrow_downward'}}</mat-icon>
   </div>
   <hr>
-  <app-filters></app-filters>
+  <app-filters (selectFilter)="selectFilter($event)"></app-filters>
 </div>

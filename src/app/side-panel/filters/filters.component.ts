@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {DataService} from '../../data.service';
 import {FeatureCollection, Filters} from '../../../constants/classes';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -15,6 +15,8 @@ import { COUNTRIES } from '../../../constants/constants';
   styleUrls: ['./filters.component.scss']
 })
 export class FiltersComponent implements OnInit {
+
+  @Output() selectFilter = new EventEmitter();
 
   constructor(
     private dataService: DataService,
@@ -80,6 +82,10 @@ export class FiltersComponent implements OnInit {
     //   this.form.controls.countries.setValue(this.filters.countries);
     //   console.log(this.form.controls.countries.value);
     // });
+
+    this.dataService.filters$.subscribe(filter => {
+      this.selectFilter.emit(filter.countries);
+    });
 
   }
 

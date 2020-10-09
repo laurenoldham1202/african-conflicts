@@ -18,4 +18,12 @@ export class SidePanelComponent implements OnInit {
     this.panelVisible = !this.panelVisible;
   }
 
+  selectFilter(selectedCountries) {
+
+    this.panelVisible = selectedCountries.length === 0;
+    // console.log(e);
+    // if (e.length) {
+    //   this.panelVisible = false;
+    // }
+  }
 }
