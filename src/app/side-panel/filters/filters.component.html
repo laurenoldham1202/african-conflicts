@@ -25,8 +25,9 @@
 <!--  <ng5-slider [options]="options" formControlName="sliderControl"></ng5-slider>-->
 <!--</form>-->
 <div class="tmp" *ngFor="let country of filters.countries" style="border: 1px solid orangered;">
-  {{filters.countries}}
 
   <h2>{{country}}</h2>
+  <h3>{{returnInfo(country, 'deaths_per_million')}}</h3>
+  <h3>{{returnInfo(country, 'count')}}</h3>
   <p>here's some info about {{country}}</p>
 </div>

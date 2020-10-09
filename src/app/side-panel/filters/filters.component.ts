@@ -7,6 +7,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as conflicts from 'src/assets/data/africa-conflict-2018.json';
 import cloneDeep from 'lodash/cloneDeep';
 import {DEFAULT_FILTERS} from '../../../constants/constants';
+import { COUNTRIES } from '../../../constants/constants';
 
 @Component({
   selector: 'app-filters',
@@ -109,5 +110,13 @@ export class FiltersComponent implements OnInit {
   //   //   console.log(y);
   //   // });
   // }
+
+  returnInfo(country, field) {
+    const data = COUNTRIES.features.filter(c => c.properties.NAME === country).map(c => c.properties[field]);
+    // return country + 'blah';
+    // console.log(data);
+    return field === 'deaths_per_million' ? data[0].toFixed(2) : data;
+  }
+
 
 }
