@@ -22,6 +22,8 @@ export class MapComponent implements OnInit {
   orangeColors = ['#fde0c5', '#facba6', '#f8b58b', '#f2855d', '#ef6a4c', '#eb4a40'];
   legendBreaks = [[0, 3], [4, 9], [10, 20], [21, 60], [61, 120], [121, 410]];
 
+  popup: M.Popup;
+
   constructor(
     private dataService: DataService,
   ) { }
@@ -148,6 +150,31 @@ export class MapComponent implements OnInit {
         this.dataService.applyFilters(this.filters);
 
       });
+
+    //   this.popupGsf = new M.Popup({ className: 'popup-gsf', closeButton: false })
+    //     .setLngLat(e.lngLat)
+    //     .setHTML(content)
+    //     .addTo(map);
+    // });
+      this.map.on('mouseover', 'conflicts', (e) => {
+        if (this.popup) {
+          this.popup.remove();
+        }
+        const props = e.features[0].properties;
+        const content = `
+        <strong>Fatalities: </strong> ${props.incident_fatalities}
+        <br><strong>Date: </strong> ${props.date}
+        <br><strong>Location: </strong> ${props.location}, ${props.country}
+        <br><strong> Involved Parties: </strong> ${props.actor1} and ${props.actor2}
+        `;
+        this.popup = new M.Popup({closeButton: false})
+          .setLngLat(e.lngLat).setHTML(content).addTo(this.map);
+      });
+
+      this.map.on('mouseout', 'conflicts', (e) => {
+        this.popup.remove();
+      });
+
     });
 
   }
