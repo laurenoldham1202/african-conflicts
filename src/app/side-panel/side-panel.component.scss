@@ -14,6 +14,13 @@
   }
 
   .about {
-    padding: 0.5rem;
+    max-height: 25rem;
+    transition: 0.7s ease-in-out;
+    overflow: auto;
   }
+}
+
+.about.hidden {
+  max-height: 0 !important;
+  overflow: hidden;
 }

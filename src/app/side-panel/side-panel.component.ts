@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidePanelComponent implements OnInit {
 
+  panelVisible = true;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  togglePanel() {
+    this.panelVisible = !this.panelVisible;
   }
 
 }

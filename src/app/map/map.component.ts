@@ -20,7 +20,7 @@ export class MapComponent implements OnInit {
   filters: Filters;
 
   orangeColors = ['#fde0c5', '#facba6', '#f8b58b', '#f2855d', '#ef6a4c', '#eb4a40'];
-  legendBreaks = [[0, 3], [4, 9], [10, 20], [21, 60], [61, 120], [121, 410]];
+  legendBreaks = [[0, 3], [3, 9], [9, 20], [20, 60], [60, 120], [120, 410]];
 
   popup: M.Popup;
 

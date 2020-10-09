@@ -1,30 +1,10 @@
-<!--<form [formGroup]="form" class="filter-form">-->
-<!--  <mat-form-field>-->
-<!--    <mat-label>Filter by country</mat-label>-->
-<!--    <mat-select formControlName="countries" multiple (selectionChange)="change()">-->
-<!--      <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>-->
-<!--    </mat-select>-->
-<!--  </mat-form-field>-->
-
-<!--  <mat-form-field>-->
-<!--    <mat-label>Filter by actors</mat-label>-->
-<!--    <mat-select formControlName="actors" multiple>-->
-<!--      <mat-option *ngFor="let actor of actors" [value]="actor">{{ actor }}</mat-option>-->
-<!--    </mat-select>-->
-<!--  </mat-form-field>-->
-
-<!--  <ng5-slider (userChange)="onchange($event)" [options]="options" formControlName="fatalities"></ng5-slider>-->
-<!--</form>-->
-
 <mat-selection-list style="height: 10rem; overflow: auto;">
-  <mat-list-option color="primary" *ngFor="let country of countries" [selected]="filters.countries.includes(country)" (click)="selectCountry(shoe)">
+  <mat-list-option color="primary" *ngFor="let country of countries" [selected]="filters.countries.includes(country)" (click)="selectCountry(country)">
     {{country}}
   </mat-list-option>
 </mat-selection-list>
-<!--<form [formGroup]="sliderForm">-->
-<!--  <ng5-slider [options]="options" formControlName="sliderControl"></ng5-slider>-->
-<!--</form>-->
-<div class="tmp" *ngFor="let country of filters.countries" style="border: 1px solid #eb4a40; padding: 1rem; margin: 1rem;">
+
+<div class="tmp" *ngFor="let country of filters.countries" style="border: 1px solid #eb4a40; padding: 1rem; margin: 0.5rem; border-radius: 4px;">
 
   <h2>{{country}}</h2>
   <h3>{{returnInfo(country, 'deaths_per_million')}} deaths per million residents</h3>
