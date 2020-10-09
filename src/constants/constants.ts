@@ -1,5 +1,5 @@
-import {Filters} from './classes';
 import * as countries from 'src/assets/data/africa-countries-counts.json';
+import { Filters } from './classes';
 
 export const DEFAULT_FILTERS: Filters = {
   countries: [],

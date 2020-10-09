@@ -7,8 +7,8 @@
       Shapefiles are provided by <a href="https://www.naturalearthdata.com/downloads/" target="_blank">Natural Earth Data</a>
       (1:110m Cultural Vectors > Admin 0 - Countries).</p>
   </div>
-  <div class="tmp" style="text-align: right;">
-  <mat-icon inline="true" (click)="togglePanel()">{{panelVisible ? 'arrow_upward' : 'arrow_downward'}}</mat-icon>
+  <div class="toggle-button">
+    <mat-icon inline="true" (click)="togglePanel()">{{panelVisible ? 'arrow_upward' : 'arrow_downward'}}</mat-icon>
   </div>
   <hr>
   <app-filters (selectFilter)="selectFilter($event)"></app-filters>

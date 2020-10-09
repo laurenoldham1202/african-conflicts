@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {DataService} from '../../data.service';
 import {FeatureCollection, Filters} from '../../../constants/classes';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 // @ts-ignore
 import * as conflicts from 'src/assets/data/africa-conflict-2018.json';
@@ -20,111 +19,47 @@ export class FiltersComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private fb: FormBuilder,
   ) { }
 
   conflicts: FeatureCollection = (conflicts as any).default;
-
-  form: FormGroup;
-
-  actors = [];
   countries = [];
-
-  options = {
-    floor: 0,
-    ceil: 0,
-    step: 1,
-  };
-
   filters: Filters = cloneDeep(DEFAULT_FILTERS);
 
   ngOnInit(): void {
+    // TODO create master toggle for selection list
+    // pass conflict data
     this.dataService.setConflictData(this.conflicts.features);
-    //
-    // // console.log(this.conflicts);
-    //
-    // this.form = this.fb.group({
-    //   countries: [[], Validators.required],
-    //   actors: [[], Validators.required],
-    //   fatalities: [[], Validators.required],
-    // });
-    //
-    // // this.dataService.conflictData$.subscribe((data: FeatureCollection) => {
-    // //   if (data) {
-    // //     this.conflicts = data;
-    //
-    //     // console.log(this.conflicts);
-    //
-    // const fatalities = this.conflicts.features.map(x => +x.properties.incident_fatalities);
-    // const min = Math.min(...fatalities);
-    // const max = Math.max(...fatalities);
-    // // console.log(max);
-    // this.options.floor = min;
-    // this.options.ceil = max;
-    // this.form.controls.fatalities.patchValue([min, max]);
 
+    // find all countries from conflict data
     this.conflicts.features.forEach(feature => {
       this.countries.push(feature.properties.country);
-      // this.actors.push(feature.properties.actor1, feature.properties.actor2);
     });
 
-    // TODO create master toggle, remove '' option from actors
-    // TODO use filter on this.conflicts.features instead of looping?
+    // retain only unique country values
     this.countries = [...new Set(this.countries.sort())];
-    // this.actors = [...new Set(this.actors.sort())];
-    // // console.log(this.actors);
-    //
-    this.dataService.applyFilters(this.filters);
-    //
-    // this.dataService.filters$.subscribe(f => {
-    //   // console.log(f);
-    //   this.filters.countries = f.countries;
-    //   this.form.controls.countries.setValue(this.filters.countries);
-    //   console.log(this.form.controls.countries.value);
-    // });
 
+    // subscribe to selected filters from map component
     this.dataService.filters$.subscribe(filter => {
       this.selectFilter.emit(filter.countries);
     });
-
   }
 
-  selectCountry(e) {
-    if (this.filters.countries.includes(e)) {
-      this.filters.countries.splice(this.filters.countries.indexOf(e), 1);
+  selectCountry(country) {
+    // remove country from filters if deselected
+    if (this.filters.countries.includes(country)) {
+      this.filters.countries.splice(this.filters.countries.indexOf(country), 1);
       this.dataService.applyFilters(this.filters);
-
     } else {
-      this.filters.countries.push(e);
+      // add country to filters if selected
+      this.filters.countries.push(country);
       this.dataService.applyFilters(this.filters);
     }
   }
-  //
-  // onchange(e) {
-  //   // console.log(e);
-  // }
-  //
-  // change(): void {
-  //   // console.log(this.form.controls.countries.value);
-  //   // console.log('change');
-  //
-  //   // console.log(countries);
-  //   this.filters.countries = this.form.controls.countries.value;
-  //   this.dataService.applyFilters(this.filters);
-  //   // countries.forEach(country => {
-  //   //   const y = this.conflicts.features.filter(x => x.properties.country === country);
-  //   //   console.log(y);
-  //   // });
-  // }
 
-  returnInfo(country, field) {
+  formatCountryInfo(country, field): number {
+    // format selected country data for selected fields
     const data = COUNTRIES.features.filter(c => c.properties.NAME === country).map(c => c.properties[field]);
-    // return country + 'blah';
-    // console.log(data);
-
-    // TODO fix condition for countries with no deaths per million data
     return field === 'deaths_per_million' ? data[0].toFixed(2) : data;
   }
-
 
 }
