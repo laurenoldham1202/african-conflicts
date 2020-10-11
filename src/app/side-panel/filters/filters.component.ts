@@ -38,6 +38,8 @@ export class FiltersComponent implements OnInit {
     // retain only unique country values
     this.countries = [...new Set(this.countries.sort())];
 
+    this.dataService.applyFilters(this.filters);
+
     // subscribe to selected filters from map component
     this.dataService.filters$.subscribe(filter => {
       this.selectFilter.emit(filter.countries);
